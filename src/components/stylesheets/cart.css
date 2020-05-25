@@ -1,0 +1,8 @@
+.cart-container{
+    background-color: white;
+    width: 25%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    right: 0;
+}

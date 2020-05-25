@@ -3,12 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css'
 import Burger from './components/burger';
 import Controls from './components/controls';
+import Cart from './components/cart';
 
 /* Array containing all slice prices and slice names
     i.e slice1 price = slicePrices[0].price = 5, 
     and so on */
 const slicePrices = [{"name" : "slice1", "price" : 5 }, {"name" : "slice2", "price" : 10 } , {"name" : "slice3", "price" : 15 } , {"name" : "slice4", "price" : 20 }];
-
+let cartArray = [];
 class App extends React.Component{
     /* state consists of number of each slice , total price and burger array (which contains the array/ sequence in which the slices are added) */
     state= {
@@ -17,7 +18,8 @@ class App extends React.Component{
         slice3 : 0,
         slice4 : 0,
         totalPrice : 0,
-        burgerArray : []
+        burgerArray : [],
+        showCart : false
     }
 
     /* function trigegred when slice1 is added to the burger */
@@ -147,11 +149,45 @@ class App extends React.Component{
             burgerArray : x
         })
     }
+    
+    resetState = () => {
+        this.setState({
+            slice1 : 0,
+            slice2 : 0,
+            slice3 : 0,
+            slice4 : 0,
+            totalPrice : 0,
+            burgerArray : []
+        })
+    }
+
+    /* function that adds the burger to cart, stores all the state information for current burger in cart Array */
+    addToCart = () =>{
+        let itemObject = {
+            slice1 : this.state.slice1,
+            slice2 : this.state.slice2,
+            slice3 : this.state.slice3,
+            slice4 : this.state.slice4,
+            totalPrice : this.state.totalPrice,
+            burgerArray : this.state.burgerArray
+        }
+        cartArray.push(itemObject);
+        console.log(cartArray)
+        this.resetState();
+    }
+
+    openCart = () => {
+        this.setState({
+            showCart : true
+        })
+    }
     render(){
         /* array that contains number of each slice */
         const slices = [this.state.slice1, this.state.slice2, this.state.slice3, this.state.slice4];
         return(
-            <div class="main-wrapper">
+            <div className="main-wrapper">
+            <button onClick={this.addToCart} >Add to cart</button>
+            <button onClick={this.openCart} >Cart</button>
                 <Burger ingredientsArray = {this.state.burgerArray}  />
                 <Controls addSlice1 = {this.addSlice1} removeSlice1 = {this.removeSlice1} 
                           addSlice2 = {this.addSlice2} removeSlice2 = {this.removeSlice2}
@@ -160,6 +196,9 @@ class App extends React.Component{
                           slices = {slices} 
                           slicePrices = {slicePrices} 
                           totalPrice = {this.state.totalPrice} />
+                {this.state.showCart &&
+                    <Cart cartList = {cartArray} />
+                }
             </div>
         )
     }
