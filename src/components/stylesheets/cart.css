@@ -1,8 +1,26 @@
 .cart-container{
-    background-color: white;
+    background-color: #140F2D;
     width: 25%;
     height: 100vh;
     position: fixed;
     top: 0;
     right: 0;
+    padding-top: 50px;
+}
+.cart-container button{
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.cart-container .single-cart-item{
+    background-color: #fff;
+    cursor: pointer;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+}
+.cart-container .single-cart-item span{
+    font-weight: 900;
+    margin-right: 15px;
 }

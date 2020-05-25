@@ -174,11 +174,36 @@ class App extends React.Component{
         cartArray.push(itemObject);
         console.log(cartArray)
         this.resetState();
+        alert("Added to cart")
     }
 
     openCart = () => {
         this.setState({
             showCart : true
+        })
+    }
+
+    loadCartItem = (e) => {
+        let identifier = e.currentTarget.id;
+        identifier = identifier.substring(10, identifier.length);
+        this.loadBurger(identifier)
+    }
+
+    loadBurger = (identifier) => {
+        this.setState({
+            slice1 : cartArray[identifier].slice1,
+            slice2 : cartArray[identifier].slice2,
+            slice3 : cartArray[identifier].slice3,
+            slice4 : cartArray[identifier].slice4,
+            totalPrice : cartArray[identifier].totalPrice,
+            burgerArray : cartArray[identifier].burgerArray,
+            showCart : false
+        })
+    }
+
+    closeCart = () => {
+        this.setState({
+            showCart : false
         })
     }
     render(){
@@ -187,7 +212,7 @@ class App extends React.Component{
         return(
             <div className="main-wrapper">
             <button onClick={this.addToCart} >Add to cart</button>
-            <button onClick={this.openCart} >Cart</button>
+            <button onClick={this.openCart} >Cart ( {cartArray.length} ) </button>
                 <Burger ingredientsArray = {this.state.burgerArray}  />
                 <Controls addSlice1 = {this.addSlice1} removeSlice1 = {this.removeSlice1} 
                           addSlice2 = {this.addSlice2} removeSlice2 = {this.removeSlice2}
@@ -197,7 +222,7 @@ class App extends React.Component{
                           slicePrices = {slicePrices} 
                           totalPrice = {this.state.totalPrice} />
                 {this.state.showCart &&
-                    <Cart cartList = {cartArray} />
+                    <Cart cartList = {cartArray} closeCart ={this.closeCart} loadCartItem = {this.loadCartItem} />
                 }
             </div>
         )
