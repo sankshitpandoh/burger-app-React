@@ -3,13 +3,15 @@ import React from 'react';
 function SingleControl(props){
     return(
         <div className="single-row">
-            <button onClick={props.addSlice}>Slice1</button>
-            <span>
-             <p>{props.slice}</p>
-             X 
-             <p>{props.slicePrice}</p>
-         </span>
-         <span className = "price">{props.slice * props.slicePrice}</span>
+            <strong>{props.slicePrice.name}</strong>
+            <span className="quantity" >
+                <button onClick={props.addSlice}>+</button>
+                <p>{props.slice}</p>
+                <button onClick={props.removeSlice}>-</button>
+            </span>
+             <span>X</span>
+             <p>{props.slicePrice.price}</p>
+         <span className = "price">Rs {props.slice * props.slicePrice.price}</span>
     </div>
     )
 }

@@ -7,7 +7,7 @@ import Controls from './components/controls';
 /* Array containing all slice prices
     i.e slice1 price = slicePrices[0] = 5 
     and so on */
-const slicePrices = [5 , 10 , 15 , 20];
+const slicePrices = [{"name" : "slice1", "price" : 5 }, {"name" : "slice2", "price" : 10 } , {"name" : "slice3", "price" : 15 } , {"name" : "slice4", "price" : 20 }];
 
 class App extends React.Component{
     state= {
@@ -54,7 +54,7 @@ class App extends React.Component{
 
     updatePrice = () => {
         this.setState({
-            totalPrice : this.state.slice1 * slicePrices[0] + this.state.slice2 * slicePrices[1] + this.state.slice3 * slicePrices[2] + this.state.slice4 * slicePrices[3] 
+            totalPrice : this.state.slice1 * slicePrices[0].price + this.state.slice2 * slicePrices[1].price + this.state.slice3 * slicePrices[2].price + this.state.slice4 * slicePrices[3].price 
         })
     }
     
