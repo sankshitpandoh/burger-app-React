@@ -66,44 +66,63 @@ class App extends React.Component{
 
     /* function triggered when slice1 is removed from the burger */
     removeSlice1 = () => {
-        this.setState({
-            slice1 : this.state.slice1 - 1
-        },() => {
-            /* update the total price once the state has been updated everywhere */
-            this.updatePrice();
-            /* removing the slice from ingredient array */
-            this.removeUpdateIngredients(1)
-        })
+        if(this.state.slice1 === 0){
+        }
+        else{
+            this.setState({
+                slice1 : this.state.slice1 - 1
+            },() => {
+                /* update the total price once the state has been updated everywhere */
+                this.updatePrice();
+                /* removing the slice from ingredient array */
+                this.removeUpdateIngredients(1)
+            })
+        }
     }
 
     /* function triggered when slice2 is removed from the burger */
     removeSlice2 = () => {
-        this.setState({
-            slice2 : this.state.slice2 - 1
-        },() => {
-            this.updatePrice();
-            this.removeUpdateIngredients(2)
-        })
+        if(this.state.slice2 === 0){
+
+        }
+        else{
+            this.setState({
+                slice2 : this.state.slice2 - 1
+            },() => {
+                this.updatePrice();
+                this.removeUpdateIngredients(2)
+            })
+        }
     }
 
     /* function triggered when slice3 is removed from the burger */
     removeSlice3 = () => {
-        this.setState({
-            slice3 : this.state.slice3 - 1
-        },() => {
-            this.updatePrice();
-            this.removeUpdateIngredients(3)
-        })
+        if(this.state.slice3 === 0){
+
+        }
+        else{
+            this.setState({
+                slice3 : this.state.slice3 - 1
+            },() => {
+                this.updatePrice();
+                this.removeUpdateIngredients(3)
+            })
+        }
     }
 
     /* function triggered when slice4 is removed from the burger */
     removeSlice4 = () => {
-        this.setState({
-            slice4 : this.state.slice4 - 1
-        },() => {
-            this.updatePrice();
-            this.removeUpdateIngredients(4)
-        })
+        if(this.state.slice4 === 0){
+            
+        }
+        else{
+            this.setState({
+                slice4 : this.state.slice4 - 1
+            },() => {
+                this.updatePrice();
+                this.removeUpdateIngredients(4)
+            })
+        }
     }
 
     /* function that updates the total price  */
@@ -163,17 +182,23 @@ class App extends React.Component{
 
     /* function that adds the burger to cart, stores all the state information for current burger in cart Array */
     addToCart = () =>{
-        let itemObject = {
-            slice1 : this.state.slice1,
-            slice2 : this.state.slice2,
-            slice3 : this.state.slice3,
-            slice4 : this.state.slice4,
-            totalPrice : this.state.totalPrice,
-            burgerArray : this.state.burgerArray
+        if(this.state.totalPrice === 0){
+            alert("Cannot add empty burger to cart");
         }
-        cartArray.push(itemObject);
-        console.log(cartArray)
-        this.resetState();
+        else{
+            let itemObject = {
+                slice1 : this.state.slice1,
+                slice2 : this.state.slice2,
+                slice3 : this.state.slice3,
+                slice4 : this.state.slice4,
+                totalPrice : this.state.totalPrice,
+                burgerArray : this.state.burgerArray
+            }
+            cartArray.push(itemObject);
+            console.log(cartArray)
+            this.resetState();
+            alert("Added to cart")
+        }
     }
 
     openCart = () => {
@@ -181,13 +206,37 @@ class App extends React.Component{
             showCart : true
         })
     }
+
+    loadCartItem = (e) => {
+        let identifier = e.currentTarget.id;
+        identifier = identifier.substring(10, identifier.length);
+        this.loadBurger(identifier)
+    }
+
+    loadBurger = (identifier) => {
+        this.setState({
+            slice1 : cartArray[identifier].slice1,
+            slice2 : cartArray[identifier].slice2,
+            slice3 : cartArray[identifier].slice3,
+            slice4 : cartArray[identifier].slice4,
+            totalPrice : cartArray[identifier].totalPrice,
+            burgerArray : cartArray[identifier].burgerArray,
+            showCart : false
+        })
+    }
+
+    closeCart = () => {
+        this.setState({
+            showCart : false
+        })
+    }
     render(){
         /* array that contains number of each slice */
-        const slices = [this.state.slice1, this.state.slice2, this.state.slice3, this.state.slice4];
+        const slices = [ this.state.slice1, this.state.slice2, this.state.slice3, this.state.slice4 ];
         return(
             <div className="main-wrapper">
             <button onClick={this.addToCart} >Add to cart</button>
-            <button onClick={this.openCart} >Cart</button>
+            <button onClick={this.openCart} className="open-cart"> Cart ( {cartArray.length} ) </button>
                 <Burger ingredientsArray = {this.state.burgerArray}  />
                 <Controls addSlice1 = {this.addSlice1} removeSlice1 = {this.removeSlice1} 
                           addSlice2 = {this.addSlice2} removeSlice2 = {this.removeSlice2}
@@ -196,8 +245,8 @@ class App extends React.Component{
                           slices = {slices} 
                           slicePrices = {slicePrices} 
                           totalPrice = {this.state.totalPrice} />
-                {this.state.showCart &&
-                    <Cart cartList = {cartArray} />
+                { this.state.showCart &&
+                    <Cart cartList = {cartArray} closeCart = {this.closeCart} loadCartItem = {this.loadCartItem} />
                 }
             </div>
         )
