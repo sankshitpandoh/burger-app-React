@@ -1,9 +1,9 @@
 import React from 'react';
 import './stylesheets/burger.css';
-import Slice1 from './slice1';
-import Slice2 from './slice2';
-import Slice3 from './slice3';
-import Slice4 from './slice4';
+import Slice1 from './slices/slice1';
+import Slice2 from './slices/slice2';
+import Slice3 from './slices/slice3';
+import Slice4 from './slices/slice4';
 
 function Burger(props){
     let items;

@@ -1,49 +1,14 @@
 import React from 'react';
 import './stylesheets/controls.css';
+import SingleControl from './single-control';
 
 function Controls(props){
     return(
         <div className="controls-container">
-           <div className="single-row">
-               <button onClick={props.addSlice1}>Slice1</button>
-               <span>
-                    <p>{props.slices[0]}</p>
-                    X 
-                    <p>{props.slicePrices[0]}</p>
-                </span>
-                <span className = "price">{props.slices[0] * props.slicePrices[0]}</span>
-           </div>
-           <div className="single-row">
-               <button onClick={props.addSlice2}>Slice2</button>
-               <span>
-                    <p>{props.slices[1]}</p>
-                    X 
-                    <p>{props.slicePrices[1]}</p>
-                </span>
-                <span className = "price">{props.slices[1] * props.slicePrices[1]}</span>
-           </div>
-           <div className="single-row">
-               <button onClick={props.addSlice3}>Slice3</button>
-               <span>
-                    <p>{props.slices[2]}</p>
-                    X 
-                    <p>{props.slicePrices[2]}</p>
-                </span>
-                <span className = "price">{props.slices[2] * props.slicePrices[2]}</span>
-           </div>
-           <div className="single-row">
-               <button onClick={props.addSlice4}>Slice4</button>
-               <span>
-                    <p>{props.slices[3]}</p>
-                    X 
-                    <p>{props.slicePrices[3]}</p>
-                </span>
-                <span className = "price">{props.slices[3] * props.slicePrices[3]}</span>
-           </div>
-           <div className = "total-price-container">
-               <h2>Total Price : </h2>
-               <h2> Rs {props.totalPrice}</h2>
-           </div>
+            <SingleControl addSlice = {props.addSlice1} slice= {props.slices[0]} slicePrice = {props.slicePrices[0]}  />
+            <SingleControl addSlice = {props.addSlice2} slice= {props.slices[1]} slicePrice = {props.slicePrices[1]}  />
+            <SingleControl addSlice = {props.addSlice3} slice= {props.slices[2]} slicePrice = {props.slicePrices[2]}  />
+            <SingleControl addSlice = {props.addSlice4} slice= {props.slices[3]} slicePrice = {props.slicePrices[3]}  />
         </div>
     )
 }
