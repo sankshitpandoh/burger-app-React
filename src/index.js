@@ -10,6 +10,7 @@ import Controls from './components/controls';
 const slicePrices = [{"name" : "slice1", "price" : 5 }, {"name" : "slice2", "price" : 10 } , {"name" : "slice3", "price" : 15 } , {"name" : "slice4", "price" : 20 }];
 
 class App extends React.Component{
+    /* state consists of number of each slice , total price and burger array (which contains the array/ sequence in which the slices are added) */
     state= {
         slice1 : 0,
         slice2 : 0,
@@ -52,15 +53,59 @@ class App extends React.Component{
         } )
     }
 
+    removeSlice1 = () => {
+        this.setState({
+            slice1 : this.state.slice1 - 1
+        },() => {
+            this.updatePrice();
+            this.removeUpdateIngredients(1)
+        })
+    }
+    removeSlice2 = () => {
+        this.setState({
+            slice2 : this.state.slice2 - 1
+        },() => {
+            this.updatePrice();
+            this.removeUpdateIngredients(2)
+        })
+    }
+    removeSlice3 = () => {
+        this.setState({
+            slice3 : this.state.slice3 - 1
+        },() => {
+            this.updatePrice();
+            this.removeUpdateIngredients(3)
+        })
+    }
+    removeSlice4 = () => {
+        this.setState({
+            slice4 : this.state.slice4 - 1
+        },() => {
+            this.updatePrice();
+            this.removeUpdateIngredients(4)
+        })
+    }
+
     updatePrice = () => {
         this.setState({
             totalPrice : this.state.slice1 * slicePrices[0].price + this.state.slice2 * slicePrices[1].price + this.state.slice3 * slicePrices[2].price + this.state.slice4 * slicePrices[3].price 
         })
     }
-    
+
     updateIngredients = (x) => {
         this.setState({
             burgerArray :   [...this.state.burgerArray , x]
+        })
+    }
+
+    removeUpdateIngredients = (toRemove) => {
+        let x = this.state.burgerArray;
+        x.reverse()
+        let y = x.indexOf(toRemove);
+        x.splice(y,1)
+        x.reverse()
+        this.setState({
+            burgerArray : x
         })
     }
     render(){
