@@ -2,6 +2,7 @@ import React from 'react';
 
 function SingleControl(props){
     return(
+        /* displaying data passed from control.js as props */
         <div className="single-row">
             <strong>{props.slicePrice.name}</strong>
             <span className="quantity" >
@@ -16,4 +17,5 @@ function SingleControl(props){
     )
 }
 
+/* export component Single Control */
 export default SingleControl;
