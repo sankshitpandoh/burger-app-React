@@ -9,7 +9,7 @@ import Cart from './components/cart';
     i.e slice1 price = slicePrices[0].price = 5, 
     and so on */
 const slicePrices = [{"name" : "slice1", "price" : 5 }, {"name" : "slice2", "price" : 10 } , {"name" : "slice3", "price" : 15 } , {"name" : "slice4", "price" : 20 }];
-let cartArray = [];
+// let cartArray = [];
 class App extends React.Component{
     /* state consists of number of each slice , total price and burger array (which contains the array/ sequence in which the slices are added) */
     state= {
@@ -19,6 +19,7 @@ class App extends React.Component{
         slice4 : 0,
         totalPrice : 0,
         burgerArray : [],
+        cartArray : [],
         showCart : false
     }
 
@@ -169,6 +170,7 @@ class App extends React.Component{
         })
     }
     
+    /* function that resets the state back to default */
     resetState = () => {
         this.setState({
             slice1 : 0,
@@ -180,7 +182,7 @@ class App extends React.Component{
         })
     }
 
-    /* function that adds the burger to cart, stores all the state information for current burger in cart Array */
+    /* function that adds the burger to cart, stores all the state information for current burger in cart Array state */
     addToCart = () =>{
         if(this.state.totalPrice === 0){
             alert("Cannot add empty burger to cart");
@@ -194,33 +196,50 @@ class App extends React.Component{
                 totalPrice : this.state.totalPrice,
                 burgerArray : this.state.burgerArray
             }
-            cartArray.push(itemObject);
-            console.log(cartArray)
-            this.resetState();
-            alert("Added to cart")
+            /* update cart array state */
+            this.setState({
+                cartArray : [...this.state.cartArray , itemObject]
+            }, () => { /* callback, once state has been updated, reset all state values or reset burger */
+                this.resetState();
+                alert("Added to cart")
+            })
+
         }
     }
 
+    /* function repsonsible for showing the cart on click */
     openCart = () => {
         this.setState({
             showCart : true
         })
     }
 
+    /* function that deletes a selected burger from cart */
+    deleteItem = (e) => {
+        let identifier = e.currentTarget.parentNode.id;
+        identifier = identifier.substring(10, identifier.length);
+        let x = this.state.cartArray
+        x.splice(identifier,1)
+        this.setState({
+            cartArray : x
+        })
+    }
+
+    /* function repsonsible for getting selected id from burger and sending it to loadBurger function to load the burger */
     loadCartItem = (e) => {
-        let identifier = e.currentTarget.id;
+        let identifier = e.currentTarget.parentNode.id;
         identifier = identifier.substring(10, identifier.length);
         this.loadBurger(identifier)
     }
 
     loadBurger = (identifier) => {
         this.setState({
-            slice1 : cartArray[identifier].slice1,
-            slice2 : cartArray[identifier].slice2,
-            slice3 : cartArray[identifier].slice3,
-            slice4 : cartArray[identifier].slice4,
-            totalPrice : cartArray[identifier].totalPrice,
-            burgerArray : cartArray[identifier].burgerArray,
+            slice1 : this.state.cartArray[identifier].slice1,
+            slice2 : this.state.cartArray[identifier].slice2,
+            slice3 : this.state.cartArray[identifier].slice3,
+            slice4 : this.state.cartArray[identifier].slice4,
+            totalPrice : this.state.cartArray[identifier].totalPrice,
+            burgerArray : this.state.cartArray[identifier].burgerArray,
             showCart : false
         })
     }
@@ -236,7 +255,7 @@ class App extends React.Component{
         return(
             <div className="main-wrapper">
             <button onClick={this.addToCart} >Add to cart</button>
-            <button onClick={this.openCart} className="open-cart"> Cart ( {cartArray.length} ) </button>
+            <button onClick={this.openCart} className="open-cart"> Cart ( {this.state.cartArray.length} ) </button>
                 <Burger ingredientsArray = {this.state.burgerArray}  />
                 <Controls addSlice1 = {this.addSlice1} removeSlice1 = {this.removeSlice1} 
                           addSlice2 = {this.addSlice2} removeSlice2 = {this.removeSlice2}
@@ -246,7 +265,7 @@ class App extends React.Component{
                           slicePrices = {slicePrices} 
                           totalPrice = {this.state.totalPrice} />
                 { this.state.showCart &&
-                    <Cart cartList = {cartArray} closeCart = {this.closeCart} loadCartItem = {this.loadCartItem} />
+                    <Cart cartList = {this.state.cartArray} closeCart = {this.closeCart} loadCartItem = {this.loadCartItem} deleteItem = {this.deleteItem}/>
                 }
             </div>
         )

@@ -10,7 +10,16 @@ function Cart(props){
     :
     items = props.cartList.map((x, index) => {
         sum = sum + props.cartList[index].totalPrice
-        return <div className="single-cart-item" key={index} id = {"cart-item-" + index} onClick={props.loadCartItem} > <span>Burger One : {index + 1}</span><p> Total Price : {props.cartList[index].totalPrice}</p></div>
+        return <div className="single-cart-item" key={index} >
+            <div>
+                <span>Burger : {index + 1}</span>
+                <p> Total Price : {props.cartList[index].totalPrice}</p>
+            </div>
+            <div id = {"cart-item-" + index}>
+                <button onClick={props.loadCartItem}>Edit</button>
+                <button onClick={props.deleteItem}>Delete</button>
+            </div>
+            </div>
     })
     return(
         <div className="cart-container">
@@ -25,3 +34,7 @@ function Cart(props){
 
 
 export default Cart;
+
+/* To do
+allow editing pre existing cart item instead of adding as new,
+improve overall functionality, like cannot add existing burger when opened */
