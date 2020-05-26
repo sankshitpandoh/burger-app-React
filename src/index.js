@@ -9,9 +9,11 @@ import Cart from './components/cart';
     i.e slice1 price = slicePrices[0].price = 5, 
     and so on */
 const slicePrices = [{"name" : "slice1", "price" : 5 }, {"name" : "slice2", "price" : 10 } , {"name" : "slice3", "price" : 15 } , {"name" : "slice4", "price" : 20 }];
+
+/* tracker keeps a track of which burger has been opened from cart for editing */
 let tracker;
 class App extends React.Component{
-    /* state consists of number of each slice , total price and burger array (which contains the array/ sequence in which the slices are added) */
+    /* state consists of number of each slice , total price and burger array (which contains the array/ sequence in which the slices are added), cart Array which contains burgers added to cart, show cart, edit cart  */
     state= {
         slice1 : 0,
         slice2 : 0,
@@ -171,7 +173,7 @@ class App extends React.Component{
         })
     }
     
-    /* function that resets the state back to default */
+    /* function that resets major state back to default */
     resetState = () => {
         this.setState({
             slice1 : 0,
@@ -244,7 +246,9 @@ class App extends React.Component{
         })
     }
 
+    /* saving chaanges made to burger to cart */
     saveChanges = () =>{
+        /* if after editing burger price has been made zero, alert user  */
         if(this.state.totalPrice === 0){
             alert("Cannot add empty burger to cart");
         }
@@ -261,14 +265,15 @@ class App extends React.Component{
             x[tracker] = itemObject
             this.setState({
                 cartArray : x,
-                editMode : false
-            }, () => { /* callback, once state has been updated, reset all state values or reset burger */
+                editMode : false /* close editing mode */
+            }, () => { /* callback, once state has been updated, reset all state values to reset burger */
                 this.resetState();
                 alert("Changes Saved")
             })
         }
     }
 
+    /* function triggered if the user dont want to save changes made */
     cancelChanges = () => {
         this.resetState();
         this.setState({
@@ -276,6 +281,7 @@ class App extends React.Component{
         })
     }
 
+    /* closing the cart tray */
     closeCart = () => {
         this.setState({
             showCart : false
@@ -286,6 +292,7 @@ class App extends React.Component{
         const slices = [ this.state.slice1, this.state.slice2, this.state.slice3, this.state.slice4 ];
         return(
             <div className="main-wrapper">
+            {/* if edit mode is opened this conndtion will load save changes and cancel buttons else it will load add to cart button */}
             {this.state.editMode === false ?
                 <button onClick={this.addToCart} >Add to cart</button>
                 :

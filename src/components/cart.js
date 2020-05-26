@@ -4,7 +4,7 @@ import './stylesheets/cart.css';
 function Cart(props){
     let items;
     let sum = 0
-    /* if no ingredients in burger ARRAY display message - add ingredients */
+    /* if no ingredients in burger ARRAY display message - add ingredients else show burgers from array */
     props.cartList.length === 0 ?
     items = <p className = "empty-cart">Burger Cart is empty :( </p>
     :
@@ -34,7 +34,3 @@ function Cart(props){
 
 
 export default Cart;
-
-/* To do
-allow editing pre existing cart item instead of adding as new,
-improve overall functionality, like cannot add existing burger when opened */
