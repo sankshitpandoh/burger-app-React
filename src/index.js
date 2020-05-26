@@ -9,9 +9,11 @@ import Cart from './components/cart';
     i.e slice1 price = slicePrices[0].price = 5, 
     and so on */
 const slicePrices = [{"name" : "slice1", "price" : 5 }, {"name" : "slice2", "price" : 10 } , {"name" : "slice3", "price" : 15 } , {"name" : "slice4", "price" : 20 }];
-let cartArray = [];
+
+/* tracker keeps a track of which burger has been opened from cart for editing */
+let tracker;
 class App extends React.Component{
-    /* state consists of number of each slice , total price and burger array (which contains the array/ sequence in which the slices are added) */
+    /* state consists of number of each slice , total price and burger array (which contains the array/ sequence in which the slices are added), cart Array which contains burgers added to cart, show cart, edit cart  */
     state= {
         slice1 : 0,
         slice2 : 0,
@@ -19,7 +21,9 @@ class App extends React.Component{
         slice4 : 0,
         totalPrice : 0,
         burgerArray : [],
-        showCart : false
+        cartArray : [],
+        showCart : false,
+        editMode : false
     }
 
     /* function trigegred when slice1 is added to the burger */
@@ -169,6 +173,7 @@ class App extends React.Component{
         })
     }
     
+    /* function that resets major state back to default */
     resetState = () => {
         this.setState({
             slice1 : 0,
@@ -180,7 +185,7 @@ class App extends React.Component{
         })
     }
 
-    /* function that adds the burger to cart, stores all the state information for current burger in cart Array */
+    /* function that adds the burger to cart, stores all the state information for current burger in cart Array state */
     addToCart = () =>{
         if(this.state.totalPrice === 0){
             alert("Cannot add empty burger to cart");
@@ -194,37 +199,94 @@ class App extends React.Component{
                 totalPrice : this.state.totalPrice,
                 burgerArray : this.state.burgerArray
             }
-            cartArray.push(itemObject);
-            console.log(cartArray)
-            this.resetState();
-            alert("Added to cart")
+            /* update cart array state */
+            this.setState({
+                cartArray : [...this.state.cartArray , itemObject]
+            }, () => { /* callback, once state has been updated, reset all state values or reset burger */
+                this.resetState();
+                alert("Added to cart")
+            })
+
         }
     }
 
+    /* function repsonsible for showing the cart on click */
     openCart = () => {
         this.setState({
             showCart : true
         })
     }
 
-    loadCartItem = (e) => {
-        let identifier = e.currentTarget.id;
+    /* function that deletes a selected burger from cart */
+    deleteItem = (e) => {
+        let identifier = e.currentTarget.parentNode.id;
         identifier = identifier.substring(10, identifier.length);
-        this.loadBurger(identifier)
-    }
-
-    loadBurger = (identifier) => {
+        let x = this.state.cartArray
+        x.splice(identifier,1)
         this.setState({
-            slice1 : cartArray[identifier].slice1,
-            slice2 : cartArray[identifier].slice2,
-            slice3 : cartArray[identifier].slice3,
-            slice4 : cartArray[identifier].slice4,
-            totalPrice : cartArray[identifier].totalPrice,
-            burgerArray : cartArray[identifier].burgerArray,
-            showCart : false
+            cartArray : x
+        }, () =>{
+            this.resetState();
+            this.setState({
+                editMode: false
+            })
         })
     }
 
+    /* function repsonsible for loading a pre created burger from cart for editing */
+    loadCartItem = (e) => {
+        let identifier = e.currentTarget.parentNode.id;
+        identifier = identifier.substring(10, identifier.length);
+        this.setState({
+            slice1 : this.state.cartArray[identifier].slice1,
+            slice2 : this.state.cartArray[identifier].slice2,
+            slice3 : this.state.cartArray[identifier].slice3,
+            slice4 : this.state.cartArray[identifier].slice4,
+            totalPrice : this.state.cartArray[identifier].totalPrice,
+            burgerArray : this.state.cartArray[identifier].burgerArray,
+            showCart : false,
+            editMode : true
+        }, () =>{
+            tracker = identifier;
+        })
+    }
+
+    /* saving chaanges made to burger to cart */
+    saveChanges = () =>{
+        /* if after editing burger price has been made zero, alert user  */
+        if(this.state.totalPrice === 0){
+            alert("Cannot add empty burger to cart");
+        }
+        else{
+            let itemObject = {
+                slice1 : this.state.slice1,
+                slice2 : this.state.slice2,
+                slice3 : this.state.slice3,
+                slice4 : this.state.slice4,
+                totalPrice : this.state.totalPrice,
+                burgerArray : this.state.burgerArray
+            }
+            let x = this.state.cartArray
+            x[tracker] = itemObject
+            this.setState({
+                cartArray : x,
+                editMode : false /* close editing mode */
+            }, () => { /* callback, once state has been updated, reset all state values to reset burger */
+                this.resetState();
+                alert("Changes Saved")
+            })
+        }
+    }
+
+    /* function triggered if the user dont want to save changes made */
+    cancelChanges = () => {
+        this.resetState();
+        this.setState({
+            editMode : false
+        })
+    }
+
+    /* closing the cart tray */
     closeCart = () => {
         this.setState({
             showCart : false
@@ -235,8 +297,17 @@ class App extends React.Component{
         const slices = [ this.state.slice1, this.state.slice2, this.state.slice3, this.state.slice4 ];
         return(
             <div className="main-wrapper">
-            <button onClick={this.addToCart} >Add to cart</button>
-            <button onClick={this.openCart} className="open-cart"> Cart ( {cartArray.length} ) </button>
+            {/* if edit mode is opened this conndtion will load save changes and cancel buttons else it will load add to cart button */}
+            {this.state.editMode === false ?
+                <button onClick={this.addToCart} >Add to cart</button>
+                :
+                <div>
+                    <button onClick={this.saveChanges} >Save Changes</button>
+                    <button onClick={this.cancelChanges} >Cancel</button>
+                </div>
+
+            }
+            <button onClick={this.openCart} className="open-cart"> Cart ( {this.state.cartArray.length} ) </button>
                 <Burger ingredientsArray = {this.state.burgerArray}  />
                 <Controls addSlice1 = {this.addSlice1} removeSlice1 = {this.removeSlice1} 
                           addSlice2 = {this.addSlice2} removeSlice2 = {this.removeSlice2}
@@ -246,7 +317,7 @@ class App extends React.Component{
                           slicePrices = {slicePrices} 
                           totalPrice = {this.state.totalPrice} />
                 { this.state.showCart &&
-                    <Cart cartList = {cartArray} closeCart = {this.closeCart} loadCartItem = {this.loadCartItem} />
+                    <Cart cartList = {this.state.cartArray} closeCart = {this.closeCart} loadCartItem = {this.loadCartItem} deleteItem = {this.deleteItem}/>
                 }
             </div>
         )

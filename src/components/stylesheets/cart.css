@@ -21,7 +21,14 @@
     padding: 5px 10px;
     margin-bottom: 5px;
     display: flex;
+    flex-direction: column;
+}
+.cart-container .single-cart-item div{
+    display: flex;
     align-items: center;
+}
+.cart-container .single-cart-item div button{
+    position: static;
 }
 .cart-container .single-cart-item span{
     font-weight: 900;

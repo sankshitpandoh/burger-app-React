@@ -4,13 +4,22 @@ import './stylesheets/cart.css';
 function Cart(props){
     let items;
     let sum = 0
-    /* if no ingredients in burger ARRAY display message - add ingredients */
+    /* if no ingredients in burger ARRAY display message - add ingredients else show burgers from array */
     props.cartList.length === 0 ?
     items = <p className = "empty-cart">Burger Cart is empty :( </p>
     :
     items = props.cartList.map((x, index) => {
         sum = sum + props.cartList[index].totalPrice
-        return <div className="single-cart-item" key={index} id = {"cart-item-" + index} onClick={props.loadCartItem} > <span>Burger One : {index + 1}</span><p> Total Price : {props.cartList[index].totalPrice}</p></div>
+        return <div className="single-cart-item" key={index} >
+            <div>
+                <span>Burger : {index + 1}</span>
+                <p> Total Price : {props.cartList[index].totalPrice}</p>
+            </div>
+            <div id = {"cart-item-" + index}>
+                <button onClick={props.loadCartItem}>Edit</button>
+                <button onClick={props.deleteItem}>Delete</button>
+            </div>
+            </div>
     })
     return(
         <div className="cart-container">
