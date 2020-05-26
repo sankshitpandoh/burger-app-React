@@ -225,6 +225,11 @@ class App extends React.Component{
         x.splice(identifier,1)
         this.setState({
             cartArray : x
+        }, () =>{
+            this.resetState();
+            this.setState({
+                editMode: false
+            })
         })
     }
 
