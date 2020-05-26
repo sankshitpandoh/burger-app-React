@@ -9,7 +9,7 @@ import Cart from './components/cart';
     i.e slice1 price = slicePrices[0].price = 5, 
     and so on */
 const slicePrices = [{"name" : "slice1", "price" : 5 }, {"name" : "slice2", "price" : 10 } , {"name" : "slice3", "price" : 15 } , {"name" : "slice4", "price" : 20 }];
-// let cartArray = [];
+let tracker;
 class App extends React.Component{
     /* state consists of number of each slice , total price and burger array (which contains the array/ sequence in which the slices are added) */
     state= {
@@ -20,7 +20,8 @@ class App extends React.Component{
         totalPrice : 0,
         burgerArray : [],
         cartArray : [],
-        showCart : false
+        showCart : false,
+        editMode : false
     }
 
     /* function trigegred when slice1 is added to the burger */
@@ -225,14 +226,10 @@ class App extends React.Component{
         })
     }
 
-    /* function repsonsible for getting selected id from burger and sending it to loadBurger function to load the burger */
+    /* function repsonsible for loading a pre created burger from cart for editing */
     loadCartItem = (e) => {
         let identifier = e.currentTarget.parentNode.id;
         identifier = identifier.substring(10, identifier.length);
-        this.loadBurger(identifier)
-    }
-
-    loadBurger = (identifier) => {
         this.setState({
             slice1 : this.state.cartArray[identifier].slice1,
             slice2 : this.state.cartArray[identifier].slice2,
@@ -240,7 +237,42 @@ class App extends React.Component{
             slice4 : this.state.cartArray[identifier].slice4,
             totalPrice : this.state.cartArray[identifier].totalPrice,
             burgerArray : this.state.cartArray[identifier].burgerArray,
-            showCart : false
+            showCart : false,
+            editMode : true
+        }, () =>{
+            tracker = identifier;
+        })
+    }
+
+    saveChanges = () =>{
+        if(this.state.totalPrice === 0){
+            alert("Cannot add empty burger to cart");
+        }
+        else{
+            let itemObject = {
+                slice1 : this.state.slice1,
+                slice2 : this.state.slice2,
+                slice3 : this.state.slice3,
+                slice4 : this.state.slice4,
+                totalPrice : this.state.totalPrice,
+                burgerArray : this.state.burgerArray
+            }
+            let x = this.state.cartArray
+            x[tracker] = itemObject
+            this.setState({
+                cartArray : x,
+                editMode : false
+            }, () => { /* callback, once state has been updated, reset all state values or reset burger */
+                this.resetState();
+                alert("Changes Saved")
+            })
+        }
+    }
+
+    cancelChanges = () => {
+        this.resetState();
+        this.setState({
+            editMode : false
         })
     }
 
@@ -254,7 +286,15 @@ class App extends React.Component{
         const slices = [ this.state.slice1, this.state.slice2, this.state.slice3, this.state.slice4 ];
         return(
             <div className="main-wrapper">
-            <button onClick={this.addToCart} >Add to cart</button>
+            {this.state.editMode === false ?
+                <button onClick={this.addToCart} >Add to cart</button>
+                :
+                <div>
+                    <button onClick={this.saveChanges} >Save Changes</button>
+                    <button onClick={this.cancelChanges} >Cancel</button>
+                </div>
+
+            }
             <button onClick={this.openCart} className="open-cart"> Cart ( {this.state.cartArray.length} ) </button>
                 <Burger ingredientsArray = {this.state.burgerArray}  />
                 <Controls addSlice1 = {this.addSlice1} removeSlice1 = {this.removeSlice1} 
