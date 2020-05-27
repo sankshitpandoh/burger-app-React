@@ -26,107 +26,33 @@ class App extends React.Component{
         editMode : false
     }
 
-    /* function trigegred when slice1 is added to the burger */
-    addSlice1 = () => {
-        this.setState({
-            slice1 : this.state.slice1 + 1
-        }, () => {
-            /* update the total price once the state has been updated everywhere */
-            this.updatePrice();
-            /* update the ingredient array once the state has been updated everywhere */
-             this.updateIngredients(1)
-        } )
-    }
-
-    /* function trigegred when slice2 is added to the burger */
-    addSlice2 = () => {
-        this.setState({
-            slice2 : this.state.slice2 + 1
-        } ,() => {
-            this.updatePrice();
-             this.updateIngredients(2)
-        } )
-    }
-
-    /* function trigegred when slice3 is added to the burger */
-    addSlice3 = () => {
-        this.setState({
-            slice3 : this.state.slice3 + 1
-        } ,() => {
-            this.updatePrice();
-             this.updateIngredients(3)
-        } )
-    }
-
-    /* function trigegred when slice4 is added to the burger */
-    addSlice4 = () => {
-        this.setState({
-            slice4 : this.state.slice4 + 1
-        } ,() => {
-            this.updatePrice();
-             this.updateIngredients(4)
-        } )
-    }
-
-    /* function triggered when slice1 is removed from the burger */
-    removeSlice1 = () => {
-        if(this.state.slice1 === 0){
-        }
-        else{
+    /* function trigegred when any slice is added to the burger */
+    addSlice = (x) => {
+        let str = "slice" + x;
             this.setState({
-                slice1 : this.state.slice1 - 1
-            },() => {
+                [str] : this.state[str] + 1
+            }, () => {
                 /* update the total price once the state has been updated everywhere */
                 this.updatePrice();
-                /* removing the slice from ingredient array */
-                this.removeUpdateIngredients(1)
+                /* update the ingredient array once the state has been updated everywhere */
+                 this.updateIngredients(x)
             })
-        }
     }
 
-    /* function triggered when slice2 is removed from the burger */
-    removeSlice2 = () => {
-        if(this.state.slice2 === 0){
 
-        }
-        else{
-            this.setState({
-                slice2 : this.state.slice2 - 1
-            },() => {
-                this.updatePrice();
-                this.removeUpdateIngredients(2)
-            })
-        }
-    }
-
-    /* function triggered when slice3 is removed from the burger */
-    removeSlice3 = () => {
-        if(this.state.slice3 === 0){
-
-        }
-        else{
-            this.setState({
-                slice3 : this.state.slice3 - 1
-            },() => {
-                this.updatePrice();
-                this.removeUpdateIngredients(3)
-            })
-        }
-    }
-
-    /* function triggered when slice4 is removed from the burger */
-    removeSlice4 = () => {
-        if(this.state.slice4 === 0){
-            
-        }
-        else{
-            this.setState({
-                slice4 : this.state.slice4 - 1
-            },() => {
-                this.updatePrice();
-                this.removeUpdateIngredients(4)
-            })
-        }
+    /* function triggered when any slice is removed from the burger */
+    removeSlice = (x) => {
+            let str = "slice" + x;
+                if(this.state[str] !== 0){
+                    this.setState({
+                        [str] : this.state[str] - 1
+                    }, () => {
+                        /* update the total price once the state has been updated everywhere */
+                        this.updatePrice();
+                        /* removing the slice from ingredient array */
+                        this.removeUpdateIngredients(x)
+                    })
+                }
     }
 
     /* function that updates the total price  */
@@ -309,10 +235,8 @@ class App extends React.Component{
             }
             <button onClick={this.openCart} className="open-cart"> Cart ( {this.state.cartArray.length} ) </button>
                 <Burger ingredientsArray = {this.state.burgerArray}  />
-                <Controls addSlice1 = {this.addSlice1} removeSlice1 = {this.removeSlice1} 
-                          addSlice2 = {this.addSlice2} removeSlice2 = {this.removeSlice2}
-                          addSlice3 = {this.addSlice3} removeSlice3 = {this.removeSlice3} 
-                          addSlice4 = {this.addSlice4} removeSlice4 = {this.removeSlice4} 
+                <Controls addSlice = {this.addSlice} 
+                          removeSlice = {this.removeSlice} 
                           slices = {slices} 
                           slicePrices = {slicePrices} 
                           totalPrice = {this.state.totalPrice} />

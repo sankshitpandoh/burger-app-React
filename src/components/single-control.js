@@ -6,9 +6,9 @@ function SingleControl(props){
         <div className="single-row">
             <strong>{props.slicePrice.name}</strong>
             <span className="quantity" >
-                <button onClick={props.addSlice}>+</button>
+                <button onClick={(e) => props.addSlice(props.value)}>+</button>
                 <p>{props.slice}</p>
-                <button onClick={props.removeSlice}>-</button>
+                <button onClick={(e) => props.removeSlice(props.value)}>-</button>
             </span>
              <span>X</span>
              <p>{props.slicePrice.price}</p>
