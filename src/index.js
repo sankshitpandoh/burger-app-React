@@ -28,89 +28,31 @@ class App extends React.Component{
 
     /* function trigegred when any slice is added to the burger */
     addSlice = (x) => {
-
-        if(x === 1){
+        let str = "slice" + x;
             this.setState({
-                slice1 : this.state.slice1 + 1
+                [str] : this.state[str] + 1
             }, () => {
                 /* update the total price once the state has been updated everywhere */
                 this.updatePrice();
                 /* update the ingredient array once the state has been updated everywhere */
-                 this.updateIngredients(1)
+                 this.updateIngredients(x)
             })
-        }
-        else if( x === 2 ){
-            this.setState({
-                slice2 : this.state.slice2 + 1
-            } ,() => {
-                this.updatePrice();
-                 this.updateIngredients(2)
-            })
-        }
-        else if( x === 3){
-            this.setState({
-                slice3 : this.state.slice3 + 1
-            } ,() => {
-                this.updatePrice();
-                 this.updateIngredients(3)
-            } )
-        }
-        else{
-            this.setState({
-                slice4 : this.state.slice4 + 1
-            } ,() => {
-                this.updatePrice();
-                 this.updateIngredients(4)
-            } )
-        }
     }
 
 
     /* function triggered when any slice is removed from the burger */
     removeSlice = (x) => {
-
-        if( x === 1 ){
-            if(this.state.slice1 !== 0){
-                this.setState({
-                    slice1 : this.state.slice1 - 1
-                },() => {
-                    /* update the total price once the state has been updated everywhere */
-                    this.updatePrice();
-                    /* removing the slice from ingredient array */
-                    this.removeUpdateIngredients(1)
-                })
-            }
-        }
-        else if( x === 2 ){
-            if(this.state.slice2 !== 0){
-                this.setState({
-                    slice2 : this.state.slice2 - 1
-                },() => {
-                    this.updatePrice();
-                    this.removeUpdateIngredients(2)
-                })
-            }
-        }
-        else if( x === 3 ){
-            if(this.state.slice3 !== 0){
-                this.setState({
-                    slice3 : this.state.slice3 - 1
-                },() => {
-                    this.updatePrice();
-                    this.removeUpdateIngredients(3)
-                })
-            }
-        }
-        else{
-            if(this.state.slice4 !== 0){
-                this.setState({
-                    slice4 : this.state.slice4 - 1
-                },() => {
-                    this.updatePrice();
-                    this.removeUpdateIngredients(4)
-                })
-            }
-        }
+            let str = "slice" + x;
+                if(this.state[str] !== 0){
+                    this.setState({
+                        [str] : this.state[str] - 1
+                    }, () => {
+                        /* update the total price once the state has been updated everywhere */
+                        this.updatePrice();
+                        /* removing the slice from ingredient array */
+                        this.removeUpdateIngredients(x)
+                    })
+                }
     }
 
     /* function that updates the total price  */
